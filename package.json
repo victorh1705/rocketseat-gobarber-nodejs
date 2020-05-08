@@ -5,15 +5,21 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc",
-    "dev:server": "ts-node-dev --transpileOnly --ignore-watch node_modules src/server.ts"
+    "dev:server": "ts-node-dev --transpileOnly --ignore-watch node_modules src/server.ts",
+    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js"
   },
   "dependencies": {
+    "@types/node": "^13.13.5",
     "@typescript-eslint/eslint-plugin": "^2.31.0",
     "@typescript-eslint/parser": "^2.31.0",
     "date-fns": "^2.13.0",
     "eslint-config-airbnb-base": "^14.1.0",
     "eslint-plugin-import": "^2.20.1",
     "express": "^4.17.1",
+    "pg": "^8.0.3",
+    "postgresql": "^0.0.1",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.2.24",
     "uuidv4": "^6.0.8"
   },
   "devDependencies": {

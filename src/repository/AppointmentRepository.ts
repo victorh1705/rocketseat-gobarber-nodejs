@@ -1,5 +1,5 @@
-import { isEqual } from 'date-fns';
-import Appointment from '../model/Appointment';
+import { EntityRepository, Repository } from 'typeorm';
+import Appointment from '../models/Appointment';
 
 // eslint-disable-next-line @typescript-eslint/class-name-casing
 interface createAppointmentDTO {
@@ -7,29 +7,14 @@ interface createAppointmentDTO {
   date: Date;
 }
 
-class AppointmentRepository {
-  appointments: Appointment[];
-
-  constructor() {
-    this.appointments = [];
-  }
-
-  public all(): Appointment[] {
-    return this.appointments;
-  }
-
-  public findByDate(date: Date): Appointment | null {
-    const appointment = this.appointments.find(a => isEqual(date, a.date));
+@EntityRepository(Appointment)
+class AppointmentRepository extends Repository<Appointment> {
+  public async findByDate(date: Date): Promise<Appointment | null> {
+    const appointment = await this.findOne({
+      where: { date },
+    });
 
     return appointment || null;
-  }
-
-  public add({ provider, date }: createAppointmentDTO): Appointment {
-    const appointment = new Appointment({ provider, date });
-
-    this.appointments.push(appointment);
-
-    return appointment;
   }
 }
 
