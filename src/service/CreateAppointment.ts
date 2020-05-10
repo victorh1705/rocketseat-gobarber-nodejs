@@ -4,7 +4,7 @@ import { getCustomRepository } from 'typeorm';
 import AppointmentRepository from '../repository/AppointmentRepository';
 import Appointment from '../models/Appointment';
 
-interface createAppointmentDTO {
+interface CreateAppointmentDTO {
   provider: string;
   date: string;
 }
@@ -19,7 +19,7 @@ class CreateAppointment {
   async execute({
     provider,
     date,
-  }: createAppointmentDTO): Promise<Appointment> {
+  }: CreateAppointmentDTO): Promise<Appointment> {
     const parsedDate = startOfHour(parseISO(date));
 
     const findAppointmentInSameDate = await this.appointmentRepository.findByDate(
@@ -29,7 +29,7 @@ class CreateAppointment {
     if (findAppointmentInSameDate) throw Error('Time already scheduled');
 
     const appointment = this.appointmentRepository.create({
-      provider,
+      provider_id: provider,
       date: parsedDate,
     });
 
