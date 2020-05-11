@@ -21,13 +21,9 @@ appointmentsRouter.post('/', async (req, res) => {
 
   const { provider, date } = req.body;
 
-  try {
-    const appointment = await createAppointment.execute({ provider, date });
+  const appointment = await createAppointment.execute({ provider, date });
 
-    return res.json(appointment);
-  } catch (e) {
-    return res.status(400).json({ error: e.message });
-  }
+  return res.json(appointment);
 });
 
 export default appointmentsRouter;

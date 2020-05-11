@@ -9,15 +9,11 @@ usersRouter.post('/', async (req, res) => {
 
   const { name, email, password } = req.body;
 
-  try {
-    const user = await createUser.execute({ name, email, password });
+  const user = await createUser.execute({ name, email, password });
 
-    delete user.password;
+  delete user.password;
 
-    return res.json(user);
-  } catch (e) {
-    return res.status(400).json({ error: e.message });
-  }
+  return res.json(user);
 });
 
 export default usersRouter;
