@@ -15,7 +15,7 @@ export default function ensureAuthenticated(
   response: Response,
   next: NextFunction,
 ): void {
-  const authHeader = request.body.authorization;
+  const authHeader = request.headers.authorization;
 
   if (!authHeader) {
     throw new AppError('JWT token is missing');
