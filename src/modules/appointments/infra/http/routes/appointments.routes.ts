@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import AppointmentRepository from '@modules/appointments/infra/typeorm/repositories/AppointmentRepository';
 import CreateAppointmentService from '@modules/appointments/service/CreateAppointmentService';
 import ensureAuthenticated from '@shared/infra/http/middleware/ensureAuthenticated';
+import { container } from 'tsyringe';
 
 const appointmentsRouter = Router();
 
@@ -14,8 +14,7 @@ appointmentsRouter.use(ensureAuthenticated);
 // });
 
 appointmentsRouter.post('/', async (req, res) => {
-  const appointmentRepository = new AppointmentRepository();
-  const createAppointment = new CreateAppointmentService(appointmentRepository);
+  const createAppointment = container.resolve(CreateAppointmentService);
 
   const { provider, date } = req.body;
 

@@ -5,6 +5,7 @@ import { sign } from 'jsonwebtoken';
 import authConfig from '@config/config';
 import AppError from '@shared/errors/AppError';
 import IUserRepository from '@modules/users/repositories/IUserRepository';
+import { inject, injectable } from 'tsyringe';
 import User from '../infra/typeorm/entities/User';
 
 interface IAuthUserDTO {
@@ -17,8 +18,12 @@ interface IResponse {
   token: string;
 }
 
+@injectable()
 class AuthenticateUserService {
-  constructor(private userRepository: IUserRepository<User>) {}
+  constructor(
+    @inject('UserRepository')
+    private userRepository: IUserRepository<User>,
+  ) {}
 
   public async execute({ email, password }: IAuthUserDTO): Promise<IResponse> {
     const user = await this.userRepository.findByEmail(email);

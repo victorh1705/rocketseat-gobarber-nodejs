@@ -1,13 +1,12 @@
 import { Router } from 'express';
 
 import CreateUser from '@modules/users/service/CreateUser';
-import UserRepository from '@modules/users/infra/typeorm/repositories/UserRepository';
+import { container } from 'tsyringe';
 
 const usersRouter = Router();
 
 usersRouter.post('/', async (req, res) => {
-  const userRepository = new UserRepository();
-  const createUser = new CreateUser(userRepository);
+  const createUser = container.resolve(CreateUser);
 
   const { name, email, password } = req.body;
 
