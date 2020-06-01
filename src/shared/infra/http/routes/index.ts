@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import appointmentsRouter from './appointments.routes';
-import UsersRouter from './users.routes';
+import appointmentsRouter from '@modules/appointments/infra/http/routes/appointments.routes';
+import UsersRouter from '@modules/users/infra/http/routes/users.routes';
 import sessionsRouter from './sessions.routes';
 
 const routes = Router();
