@@ -3,3 +3,5 @@
 
 /.idea/
 /yarn-error.log
+/tmp/
+!/tmp/.gitkeep
