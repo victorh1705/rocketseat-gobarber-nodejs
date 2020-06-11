@@ -7,13 +7,13 @@ import FakeHashProvider from '@modules/users/providers/fakes/FakeHashProvider';
 
 import AppError from '@shared/errors/AppError';
 
+let fakeUserRepository: FakeUserRepository;
+let fakeUserTokenRepository: FakeUserTokenRepository;
+let fakeHashProvider: FakeHashProvider;
+
+let resetPasswordService: ResetPasswordService;
+
 describe('ResetPasswordService', () => {
-  let fakeUserRepository: FakeUserRepository;
-  let fakeUserTokenRepository: FakeUserTokenRepository;
-  let fakeHashProvider: FakeHashProvider;
-
-  let resetPasswordService: ResetPasswordService;
-
   beforeEach(() => {
     fakeUserRepository = new FakeUserRepository();
     fakeUserTokenRepository = new FakeUserTokenRepository();

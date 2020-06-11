@@ -4,16 +4,23 @@ import FakeStorageProvider from '@shared/container/providers/StorageProvider/fak
 import UpdateUserAvatarService from '@modules/users/service/UpdateUserAvatarService';
 import AppError from '@shared/errors/AppError';
 
-describe('UpdateUserAvatarService', () => {
-  it('should be able to update avatar from an user', async () => {
-    const fakeUserRepository = new FakeUserRepository();
-    const fakeStorageProvider = new FakeStorageProvider();
+let fakeUserRepository: FakeUserRepository;
+let fakeStorageProvider: FakeStorageProvider;
 
-    const updateUserAvatarService = new UpdateUserAvatarService(
+let updateUserAvatarService: UpdateUserAvatarService;
+
+describe('UpdateUserAvatarService', () => {
+  beforeEach(() => {
+    fakeUserRepository = new FakeUserRepository();
+    fakeStorageProvider = new FakeStorageProvider();
+
+    updateUserAvatarService = new UpdateUserAvatarService(
       fakeUserRepository,
       fakeStorageProvider,
     );
+  });
 
+  it('should be able to update avatar from an user', async () => {
     const avatarFileName = 'avatar.png';
 
     const user = await fakeUserRepository.create({
@@ -31,14 +38,6 @@ describe('UpdateUserAvatarService', () => {
   });
 
   it('should not be able to update avatar from an non existing user', async () => {
-    const fakeUserRepository = new FakeUserRepository();
-    const fakeStorageProvider = new FakeStorageProvider();
-
-    const updateUserAvatarService = new UpdateUserAvatarService(
-      fakeUserRepository,
-      fakeStorageProvider,
-    );
-
     const avatarFileName = 'avatar.png';
 
     await expect(
@@ -50,16 +49,7 @@ describe('UpdateUserAvatarService', () => {
   });
 
   it('should delete old avatar when updating new one', async () => {
-    const fakeUserRepository = new FakeUserRepository();
-    const fakeStorageProvider = new FakeStorageProvider();
-
     const deleteFile = jest.spyOn(fakeStorageProvider, 'deleteFile');
-
-    const updateUserAvatarService = new UpdateUserAvatarService(
-      fakeUserRepository,
-      fakeStorageProvider,
-    );
-
     const avatarFileName = 'avatar.png';
 
     const user = await fakeUserRepository.create({

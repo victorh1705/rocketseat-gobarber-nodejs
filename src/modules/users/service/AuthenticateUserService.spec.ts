@@ -4,23 +4,31 @@ import AuthenticateUserService from '@modules/users/service/AuthenticateUserServ
 import CreateUserService from '@modules/users/service/CreateUserService';
 import FakeHashProvider from '@modules/users/providers/fakes/FakeHashProvider';
 import AppError from '@shared/errors/AppError';
+import User from '@modules/users/infra/typeorm/entities/User';
+
+let fakeUserRepository: FakeUserRepository;
+let fakeHashProvider: FakeHashProvider;
+let user: User;
+let authenticateUserService: AuthenticateUserService;
 
 describe('AuthenticateUser', () => {
-  it('should be able to authenticate', async () => {
-    const fakeUserRepository = new FakeUserRepository();
-    const fakeHashProvider = new FakeHashProvider();
+  beforeEach(() => {
+    fakeUserRepository = new FakeUserRepository();
+    fakeHashProvider = new FakeHashProvider();
+  });
 
+  it('should be able to authenticate', async () => {
     const createUserService = new CreateUserService(
       fakeUserRepository,
       fakeHashProvider,
     );
 
-    const authenticateUserService = new AuthenticateUserService(
+    authenticateUserService = new AuthenticateUserService(
       fakeUserRepository,
       fakeHashProvider,
     );
 
-    const user = await createUserService.execute({
+    user = await createUserService.execute({
       name: 'John Doe',
       email: 'john@example.com',
       password: '123456',
@@ -36,10 +44,7 @@ describe('AuthenticateUser', () => {
   });
 
   it('should not be able to authenticate with non existing user', async () => {
-    const fakeUserRepository = new FakeUserRepository();
-    const fakeHashProvider = new FakeHashProvider();
-
-    const authenticateUserService = new AuthenticateUserService(
+    authenticateUserService = new AuthenticateUserService(
       fakeUserRepository,
       fakeHashProvider,
     );
@@ -53,15 +58,12 @@ describe('AuthenticateUser', () => {
   });
 
   it('should not be able to authenticate user with wrong password', async () => {
-    const fakeUserRepository = new FakeUserRepository();
-    const fakeHashProvider = new FakeHashProvider();
-
     const createUserService = new CreateUserService(
       fakeUserRepository,
       fakeHashProvider,
     );
 
-    const authenticateUserService = new AuthenticateUserService(
+    authenticateUserService = new AuthenticateUserService(
       fakeUserRepository,
       fakeHashProvider,
     );
