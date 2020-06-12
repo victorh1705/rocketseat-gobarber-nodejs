@@ -1,8 +1,8 @@
+import { getHours } from 'date-fns';
 import { inject, injectable } from 'tsyringe';
 
-import IAppointmentRepository from '@modules/appointments/repositories/IAppointmentRepository';
 import Appointment from '@modules/appointments/infra/typeorm/entities/Appointment';
-import { getDate, getDaysInMonth } from 'date-fns';
+import IAppointmentRepository from '@modules/appointments/repositories/IAppointmentRepository';
 
 interface IRequest {
   provider_id: string;
@@ -12,7 +12,7 @@ interface IRequest {
 }
 
 type IResponse = Array<{
-  day: number;
+  hour: number;
   available: boolean;
 }>;
 
@@ -31,29 +31,30 @@ class ListProviderDayAvailabilityService {
     month,
     year,
   }: IRequest): Promise<IResponse> {
-    const appointments = await this.appointmentIAppointmentRepository.findAllInMonthFromProvider(
+    const appointments = await this.appointmentIAppointmentRepository.findAllInDayFromProvider(
       {
         provider_id,
+        day,
         month,
         year,
       },
     );
 
-    const daysInMonth = getDaysInMonth(new Date(year, month + 1));
+    const startHour = 8;
 
-    const eachDayArray = Array.from(
-      { length: daysInMonth },
-      (_, index) => index + 1,
+    const eachHourArray = Array.from(
+      { length: 10 },
+      (_, index) => index + startHour,
     );
 
-    const availability = eachDayArray.map(day => {
-      const appointmentsInDay = appointments.filter(
-        appointment => getDate(appointment.date) === day,
+    const availability = eachHourArray.map(hour => {
+      const hasAppointmentInHour = appointments.find(
+        appointment => getHours(appointment.date) === hour,
       );
 
       return {
-        day,
-        available: appointmentsInDay.length < 10,
+        hour,
+        available: !hasAppointmentInHour,
       };
     });
 
