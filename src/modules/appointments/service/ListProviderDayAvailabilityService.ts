@@ -6,6 +6,7 @@ import { getDate, getDaysInMonth } from 'date-fns';
 
 interface IRequest {
   provider_id: string;
+  day: number;
   month: number;
   year: number;
 }
@@ -16,7 +17,7 @@ type IResponse = Array<{
 }>;
 
 @injectable()
-class ListProviderMontlyAvailabilityService {
+class ListProviderDayAvailabilityService {
   constructor(
     @inject('AppointmentIAppointmentRepository')
     private appointmentIAppointmentRepository: IAppointmentRepository<
@@ -26,6 +27,7 @@ class ListProviderMontlyAvailabilityService {
 
   public async execute({
     provider_id,
+    day,
     month,
     year,
   }: IRequest): Promise<IResponse> {
@@ -36,8 +38,6 @@ class ListProviderMontlyAvailabilityService {
         year,
       },
     );
-
-    console.log(appointments);
 
     const daysInMonth = getDaysInMonth(new Date(year, month + 1));
 
@@ -61,4 +61,4 @@ class ListProviderMontlyAvailabilityService {
   }
 }
 
-export default ListProviderMontlyAvailabilityService;
+export default ListProviderDayAvailabilityService;

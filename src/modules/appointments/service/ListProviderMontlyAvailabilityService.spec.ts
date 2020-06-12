@@ -5,7 +5,7 @@ import ListProviderMontlyAvailabilityService from '@modules/appointments/service
 let fakeAppointmentsRepository: FakeAppointmentsRepository;
 let listProviderMontlyAvailabilityService: ListProviderMontlyAvailabilityService;
 
-describe('UpdateProfileService', () => {
+describe('ListProviderMontlyAvailabilityService', () => {
   beforeEach(() => {
     fakeAppointmentsRepository = new FakeAppointmentsRepository();
     listProviderMontlyAvailabilityService = new ListProviderMontlyAvailabilityService(
