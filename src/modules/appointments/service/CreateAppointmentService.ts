@@ -6,7 +6,8 @@ import { inject, injectable } from 'tsyringe';
 import Appointment from '../infra/typeorm/entities/Appointment';
 
 interface IRequest {
-  provider: string;
+  provider_id: string;
+  user_id: string;
   date: string;
 }
 
@@ -17,7 +18,11 @@ class CreateAppointmentService {
     private appointmentRepository: IAppointmentRepository<Appointment>,
   ) {}
 
-  async execute({ provider, date }: IRequest): Promise<Appointment> {
+  async execute({
+    provider_id,
+    user_id,
+    date,
+  }: IRequest): Promise<Appointment> {
     const parsedDate = startOfHour(parseISO(date));
 
     const findAppointmentInSameDate = await this.appointmentRepository.findByDate(
@@ -27,7 +32,8 @@ class CreateAppointmentService {
     if (findAppointmentInSameDate) throw new AppError('Time already scheduled');
 
     const appointment = await this.appointmentRepository.create({
-      provider_id: provider,
+      provider_id,
+      user_id,
       date: parsedDate,
     });
 
