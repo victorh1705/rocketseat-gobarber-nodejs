@@ -6,6 +6,7 @@ import AppointmentControllers from '@modules/appointments/infra/http/controllers
 import ProvidersDayAvailabilityControllers from '@modules/appointments/infra/http/controllers/ProviderDayAvailabilityControllers';
 import ProvidersMonthAvailabilityControllers from '@modules/appointments/infra/http/controllers/ProviderMonthAvailabilityControllers';
 import ProviderAppointmentControllers from '@modules/appointments/infra/http/controllers/ProviderAppointmentControllers';
+import { celebrate, Joi, Segments } from 'celebrate';
 
 const appointmentsRouter = Router();
 
@@ -23,14 +24,33 @@ appointmentsRouter.use(ensureAuthenticated);
 //   return res.json(appointments);
 // });
 
-appointmentsRouter.post('/', appointmentControllers.create);
+appointmentsRouter.post(
+  '/',
+  celebrate({
+    [Segments.BODY]: {
+      provider_id: Joi.string().uuid().required(),
+      date: Joi.date(),
+    },
+  }),
+  appointmentControllers.create,
+);
 appointmentsRouter.get('/me', providerAppointmentControllers.create);
 appointmentsRouter.post(
   '/:provider_id/month-availability',
+  celebrate({
+    [Segments.PARAMS]: {
+      provider_id: Joi.string().uuid().required(),
+    },
+  }),
   providersMonthAvailabilityControllers.index,
 );
 appointmentsRouter.post(
   '/:provider_id/day-availability',
+  celebrate({
+    [Segments.PARAMS]: {
+      provider_id: Joi.string().uuid().required(),
+    },
+  }),
   providersDayAvailabilityControllers.index,
 );
 
