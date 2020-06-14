@@ -1,5 +1,7 @@
 import 'reflect-metadata';
+import 'dotenv/config';
 
+import { errors } from 'celebrate';
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import 'express-async-errors';
@@ -9,7 +11,6 @@ import routes from './routes';
 
 import '../database';
 import '@shared/container';
-import { errors } from 'celebrate';
 
 const app = express();
 
