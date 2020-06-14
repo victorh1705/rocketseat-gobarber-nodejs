@@ -68,17 +68,15 @@ class AppointmentRepository implements IAppointmentRepository<Appointment> {
     const parsedDay = String(day).padStart(2, '0');
     const parsedMonth = String(month).padStart(2, '0');
 
-    const appointments = await this.ormRepository.find({
+    return this.ormRepository.find({
       where: {
         provider_id,
-        data: Raw(
+        date: Raw(
           dataFieldName =>
-            `to_char(${dataFieldName}, 'DD-MM-YYYY') = ${parsedDay}-${parsedMonth}-${year}`,
+            `to_char(${dataFieldName}, 'DD-MM-YYYY') = '${parsedDay}-${parsedMonth}-${year}'`,
         ),
       },
     });
-
-    return appointments;
   }
 }
 
