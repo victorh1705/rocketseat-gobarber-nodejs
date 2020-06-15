@@ -1,4 +1,5 @@
 import { inject, injectable } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import IUserRepository from '@modules/users/repositories/IUserRepository';
 import User from '@modules/users/infra/typeorm/entities/User';
@@ -22,8 +23,6 @@ export default class UpdateProfileService {
       throw new AppError('User not found!');
     }
 
-    delete user.password;
-
-    return this.userRepository.save(user);
+    return this.userRepository.save(classToClass(user));
   }
 }
