@@ -10,11 +10,6 @@ interface IRequest {
   email: string;
 }
 
-interface IResponse {
-  user: User;
-  token: string;
-}
-
 @injectable()
 class SendForgotPasswordEmailService {
   constructor(
