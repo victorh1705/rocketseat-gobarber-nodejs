@@ -1,9 +1,11 @@
-import { hash } from 'bcryptjs';
+import { inject, injectable } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
+
 import IUserRepository from '@modules/users/repositories/IUserRepository';
-import { inject, injectable } from 'tsyringe';
 import IHashProvider from '@modules/users/providers/models/IHashProvider';
+import ICacheProvider from '@shared/container/providers/CacheProvider/models/ICacheProvider';
+
 import User from '../infra/typeorm/entities/User';
 
 interface ICreateUserDTO {
@@ -19,6 +21,8 @@ class CreateUserService {
     private userRepository: IUserRepository<User>,
     @inject('HashProvider')
     private hashProvider: IHashProvider,
+    @inject('CacheProvider')
+    private cacheProvider: ICacheProvider,
   ) {}
 
   public async execute({
@@ -32,11 +36,15 @@ class CreateUserService {
 
     const hashedPassword = await this.hashProvider.generateHash(password);
 
-    return this.userRepository.create({
+    const user = await this.userRepository.create({
       name,
       email,
       password: hashedPassword,
     });
+
+    await this.cacheProvider.invalidatePrefix('providers-list');
+
+    return user;
   }
 }
 
