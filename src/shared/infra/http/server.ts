@@ -7,6 +7,7 @@ import cors from 'cors';
 import 'express-async-errors';
 
 import AppError from '@shared/errors/AppError';
+import rateLimiter from '@shared/infra/http/middleware/rateLimiter';
 import routes from './routes';
 
 import '../database';
@@ -14,6 +15,7 @@ import '@shared/container';
 
 const app = express();
 
+app.use(rateLimiter);
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(routes);
