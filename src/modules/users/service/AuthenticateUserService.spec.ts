@@ -5,24 +5,36 @@ import CreateUserService from '@modules/users/service/CreateUserService';
 import FakeHashProvider from '@modules/users/providers/fakes/FakeHashProvider';
 import AppError from '@shared/errors/AppError';
 import User from '@modules/users/infra/typeorm/entities/User';
+import FakeCacheProvider from '@shared/container/providers/CacheProvider/fake/FakeCacheProvider';
+
+let user: User;
 
 let fakeUserRepository: FakeUserRepository;
 let fakeHashProvider: FakeHashProvider;
-let user: User;
+let fakeCacheProvider: FakeCacheProvider;
+
+let createUserService: CreateUserService;
 let authenticateUserService: AuthenticateUserService;
 
 describe('AuthenticateUser', () => {
   beforeEach(() => {
     fakeUserRepository = new FakeUserRepository();
     fakeHashProvider = new FakeHashProvider();
-  });
+    fakeCacheProvider = new FakeCacheProvider();
 
-  it('should be able to authenticate', async () => {
-    const createUserService = new CreateUserService(
+    authenticateUserService = new AuthenticateUserService(
       fakeUserRepository,
       fakeHashProvider,
     );
 
+    createUserService = new CreateUserService(
+      fakeUserRepository,
+      fakeHashProvider,
+      fakeCacheProvider,
+    );
+  });
+
+  it('should be able to authenticate', async () => {
     authenticateUserService = new AuthenticateUserService(
       fakeUserRepository,
       fakeHashProvider,
@@ -58,16 +70,6 @@ describe('AuthenticateUser', () => {
   });
 
   it('should not be able to authenticate user with wrong password', async () => {
-    const createUserService = new CreateUserService(
-      fakeUserRepository,
-      fakeHashProvider,
-    );
-
-    authenticateUserService = new AuthenticateUserService(
-      fakeUserRepository,
-      fakeHashProvider,
-    );
-
     await createUserService.execute({
       name: 'John Doe',
       email: 'john@example.com',
