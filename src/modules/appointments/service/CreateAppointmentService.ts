@@ -47,6 +47,7 @@ class CreateAppointmentService {
 
     const findAppointmentInSameDate = await this.appointmentRepository.findByDate(
       parsedDate,
+      provider_id,
     );
 
     if (findAppointmentInSameDate) throw new AppError('Time already scheduled');

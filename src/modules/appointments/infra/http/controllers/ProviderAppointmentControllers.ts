@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
 import ListProviderAppointmentService from '@modules/appointments/service/ListProviderAppointmentService';
+import { classToClass } from 'class-transformer';
 
 class ProviderAppointmentControllers {
   public async create(req: Request, res: Response): Promise<Response> {
@@ -19,7 +20,7 @@ class ProviderAppointmentControllers {
       year: Number(year),
     });
 
-    return res.json(providers);
+    return res.json(classToClass(providers));
   }
 }
 
