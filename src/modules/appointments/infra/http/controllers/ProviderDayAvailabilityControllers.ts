@@ -6,7 +6,7 @@ import ListProviderDayAvailabilityService from '@modules/appointments/service/Li
 class ProviderDayAvailabilityControllers {
   public async index(req: Request, res: Response): Promise<Response> {
     const { provider_id } = req.params;
-    const { day, month, year } = req.body;
+    const { day, month, year } = req.query;
 
     const listProviderDayAvailabilityService = container.resolve(
       ListProviderDayAvailabilityService,
@@ -14,9 +14,9 @@ class ProviderDayAvailabilityControllers {
 
     const providers = await listProviderDayAvailabilityService.execute({
       provider_id,
-      day,
-      month,
-      year,
+      day: Number(day),
+      month: Number(month),
+      year: Number(year),
     });
 
     return res.json(providers);

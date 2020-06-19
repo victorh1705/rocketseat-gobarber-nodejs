@@ -35,7 +35,7 @@ appointmentsRouter.post(
   appointmentControllers.create,
 );
 appointmentsRouter.get('/me', providerAppointmentControllers.create);
-appointmentsRouter.post(
+appointmentsRouter.get(
   '/:provider_id/month-availability',
   celebrate({
     [Segments.PARAMS]: {
@@ -44,7 +44,7 @@ appointmentsRouter.post(
   }),
   providersMonthAvailabilityControllers.index,
 );
-appointmentsRouter.post(
+appointmentsRouter.get(
   '/:provider_id/day-availability',
   celebrate({
     [Segments.PARAMS]: {
