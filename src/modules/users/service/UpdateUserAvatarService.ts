@@ -16,7 +16,7 @@ export default class UpdateUserAvatarService {
     @inject('UserRepository')
     private userRepository: IUserRepository<User>,
     @inject('StorageProvider')
-    private iStorageProvider: IStorageProvider,
+    private storageProvider: IStorageProvider,
   ) {}
 
   public async execute({ user_id, avatarFileName }: IRequest): Promise<User> {
@@ -26,10 +26,10 @@ export default class UpdateUserAvatarService {
       throw new AppError('Only authenticates users can change avatar', 401);
 
     if (user.avatar) {
-      await this.iStorageProvider.deleteFile(user.avatar);
+      await this.storageProvider.deleteFile(user.avatar);
     }
 
-    user.avatar = await this.iStorageProvider.saveFile(avatarFileName);
+    user.avatar = await this.storageProvider.saveFile(avatarFileName);
 
     await this.userRepository.save(user);
 

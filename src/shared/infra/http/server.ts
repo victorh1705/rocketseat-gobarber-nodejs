@@ -12,11 +12,13 @@ import routes from './routes';
 
 import '../database';
 import '@shared/container';
+import uploadConfig from '@config/upload';
 
 const app = express();
 
-app.use(rateLimiter);
 app.use(cors({ origin: true, credentials: true }));
+app.use('/files', express.static(uploadConfig.uploadsFolder))
+app.use(rateLimiter);
 app.use(express.json());
 app.use(routes);
 
